@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import * as Sentry from "@sentry/nextjs";
+import ErrorBoundary from '../components/ErrorBoundary';
 
 interface User {
   id: number;
@@ -15,23 +17,34 @@ export default function Home() {
   const [newUser, setNewUser] = useState({ name: '', email: '' });
   const [isAdding, setIsAdding] = useState(false);
 
-  // 获取用户列表
+  // Fetch user list
   const fetchUsers = async () => {
     try {
       const response = await fetch('http://127.0.0.1:8000/users');
       const data = await response.json();
       setUsers(data);
     } catch (error) {
-      console.error('获取用户失败:', error);
+      console.error('Failed to fetch users:', error);
+      // Capture error to Sentry
+      Sentry.captureException(error, {
+        tags: {
+          action: 'fetch_users',
+          endpoint: '/users'
+        },
+        extra: {
+          error_message: error.message,
+          stack: error.stack
+        }
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // 添加新用户
+  // Add new user
   const addUser = async () => {
     if (!newUser.name || !newUser.email) {
-      alert('请填写姓名和邮箱');
+      alert('Please fill in name and email');
       return;
     }
 
@@ -47,14 +60,26 @@ export default function Home() {
 
       if (response.ok) {
         setNewUser({ name: '', email: '' });
-        fetchUsers(); // 重新获取用户列表
-        alert('用户添加成功！');
+        fetchUsers(); // Refresh user list
+        alert('User added successfully!');
       } else {
-        alert('添加用户失败');
+        alert('Failed to add user');
       }
     } catch (error) {
-      console.error('添加用户失败:', error);
-      alert('添加用户失败');
+      console.error('Failed to add user:', error);
+      // Capture error to Sentry
+      Sentry.captureException(error, {
+        tags: {
+          action: 'add_user',
+          endpoint: '/users'
+        },
+        extra: {
+          user_data: newUser,
+          error_message: error.message,
+          stack: error.stack
+        }
+      });
+      alert('Failed to add user');
     } finally {
       setIsAdding(false);
     }
@@ -65,26 +90,27 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-4xl mx-auto px-4">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          🍽️ EatToday 用户管理
+          🍽️ EatToday User Management
         </h1>
 
-        {/* 添加用户表单 */}
+        {/* Add user form */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">添加新用户</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Add New User</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input
               type="text"
-              placeholder="姓名"
+              placeholder="Name"
               value={newUser.name}
               onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="email"
-              placeholder="邮箱"
+              placeholder="Email"
               value={newUser.email}
               onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -94,24 +120,24 @@ export default function Home() {
               disabled={isAdding}
               className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isAdding ? '添加中...' : '添加用户'}
+              {isAdding ? 'Adding...' : 'Add User'}
             </button>
           </div>
         </div>
 
-        {/* 用户列表 */}
+        {/* User list */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">用户列表</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">User List</h2>
           
           {loading ? (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              <p className="mt-2 text-gray-600">加载中...</p>
+              <p className="mt-2 text-gray-600">Loading...</p>
             </div>
           ) : users.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-500 text-lg">暂无用户数据</p>
-              <p className="text-gray-400 text-sm mt-2">请添加第一个用户</p>
+              <p className="text-gray-500 text-lg">No user data</p>
+              <p className="text-gray-400 text-sm mt-2">Please add the first user</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -122,13 +148,13 @@ export default function Home() {
                       ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      姓名
+                      Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      邮箱
+                      Email
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      创建时间
+                      Created At
                     </th>
                   </tr>
                 </thead>
@@ -155,12 +181,23 @@ export default function Home() {
           )}
         </div>
 
-        {/* 状态信息 */}
+        {/* Status information */}
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>后端API: http://127.0.0.1:8000</p>
-          <p>当前用户数量: {users.length}</p>
+          <p>Backend API: http://127.0.0.1:8000</p>
+          <p>Current user count: {users.length}</p>
+        </div>
+
+        {/* Sentry test link */}
+        <div className="mt-4 text-center">
+          <a
+            href="/test-error"
+            className="inline-flex items-center px-4 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100"
+          >
+            🧪 Test Sentry Error Capture
+          </a>
         </div>
       </div>
     </div>
+    </ErrorBoundary>
   );
 }
