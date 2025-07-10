@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
-from typing import Dict, List, Any, Union
+from typing import Dict, Any
 
 # Load environment variables from .env file
 load_dotenv()
