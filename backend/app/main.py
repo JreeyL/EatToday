@@ -37,6 +37,7 @@ app.add_middleware(
 )
 
 # User model
+
 class UserCreate(BaseModel):
     email: str
 
