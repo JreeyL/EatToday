@@ -54,7 +54,7 @@ async def root() -> Dict[str, str]:
 
 
 @app.options("/")
-async def options_root():
+async def options_root() -> Dict[str, str]:
     """处理OPTIONS请求"""
     return {"message": "OK"}
 
