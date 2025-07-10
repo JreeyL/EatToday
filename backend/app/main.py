@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
+from typing import Dict, List, Any, Optional, Union
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,8 +21,14 @@ sentry_sdk.init(
 )
 
 # Initialize Supabase client
-supabase_url: str = os.getenv("SUPABASE_URL")
-supabase_key: str = os.getenv("SUPABASE_KEY")
+supabase_url: str = os.getenv("SUPABASE_URL", "")  # 提供默认值避免None
+if not supabase_url:
+    raise ValueError("SUPABASE_URL environment variable is not set")
+
+supabase_key: str = os.getenv("SUPABASE_KEY", "")  # 提供默认值避免None
+if not supabase_key:
+    raise ValueError("SUPABASE_KEY environment variable is not set")
+
 supabase: Client = create_client(supabase_url, supabase_key)
 
 # 创建 FastAPI 实例
@@ -42,12 +49,12 @@ class UserCreate(BaseModel):
 
 
 @app.get("/")
-async def root():
+async def root() -> Dict[str, str]:
     return {"message": "Welcome to EatToday API!"}
 
 
 @app.get("/users")
-async def get_users():
+async def get_users() -> Union[List[Dict[str, Any]], Dict[str, str]]:
     try:
         response = supabase.table("users").select("*").execute()
         return response.data
@@ -58,7 +65,7 @@ async def get_users():
 
 
 @app.get("/test-error")
-async def test_error():
+async def test_error() -> Dict[str, str]:
     try:
         # Intentionally throw an error to test Sentry
         raise Exception("This is a test error for Sentry integration verification")
@@ -68,7 +75,7 @@ async def test_error():
 
 
 @app.post("/users")
-async def create_user(user: UserCreate):
+async def create_user(user: UserCreate) -> Dict[str, Any]:
     try:
         user_data = {"email": user.email, "created_at": datetime.utcnow().isoformat()}
         response = supabase.table("users").insert(user_data).execute()
