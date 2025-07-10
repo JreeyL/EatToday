@@ -52,5 +52,6 @@ addopts = [
     "--cov=app",
     "--cov-report=term-missing",
     "--cov-report=xml",
-    "--cov-report=html"
+    "--cov-report=html",
+    "-p", "no:asyncio"
 ] 
