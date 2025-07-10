@@ -8,4 +8,4 @@ export async function register() {
       environment: process.env.NODE_ENV,
     });
   }
-} 
+}

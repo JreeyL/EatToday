@@ -22,7 +22,7 @@ export default function TestErrorPage() {
           stack: error.stack,
         },
       });
-      setTestResults(prev => [...prev, '‚úÖ JavaScript error captured to Sentry']);
+      setTestResults(prev => [...prev, '‚ú?JavaScript error captured to Sentry']);
     }
   };
 
@@ -44,7 +44,7 @@ export default function TestErrorPage() {
           endpoint: '/non-existent-endpoint',
         },
       });
-      setTestResults(prev => [...prev, '‚úÖ API error captured to Sentry']);
+      setTestResults(prev => [...prev, '‚ú?API error captured to Sentry']);
     }
   };
 
@@ -55,7 +55,7 @@ export default function TestErrorPage() {
       // This will trigger an error in the next event loop
       throw new Error('This is an uncaught async error');
     }, 100);
-    setTestResults(prev => [...prev, '‚è≥ Async error will trigger in 1 second']);
+    setTestResults(prev => [...prev, '‚è?Async error will trigger in 1 second']);
   };
 
   // Test React component error
@@ -71,7 +71,7 @@ export default function TestErrorPage() {
           page: 'test-error',
         },
       });
-      setTestResults(prev => [...prev, '‚úÖ React error captured to Sentry']);
+      setTestResults(prev => [...prev, '‚ú?React error captured to Sentry']);
     }
   };
 
@@ -107,7 +107,7 @@ export default function TestErrorPage() {
               onClick={testUncaughtError}
               className="px-6 py-3 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             >
-              ‚ö° Test Async Error
+              ‚ö?Test Async Error
             </button>
 
             <button
@@ -140,10 +140,10 @@ export default function TestErrorPage() {
         <div className="mt-6 bg-blue-50 rounded-lg p-4">
           <h3 className="text-lg font-semibold text-blue-800 mb-2">üìã Test Instructions</h3>
           <ul className="text-blue-700 space-y-1">
-            <li>‚Ä¢ <strong>JavaScript Error</strong>: Directly thrown errors, caught by try-catch</li>
-            <li>‚Ä¢ <strong>API Call Error</strong>: Network request failure errors</li>
-            <li>‚Ä¢ <strong>Async Error</strong>: Uncaught errors thrown in async operations</li>
-            <li>‚Ä¢ <strong>React Error</strong>: Runtime errors in React components</li>
+            <li>‚Ä?<strong>JavaScript Error</strong>: Directly thrown errors, caught by try-catch</li>
+            <li>‚Ä?<strong>API Call Error</strong>: Network request failure errors</li>
+            <li>‚Ä?<strong>Async Error</strong>: Uncaught errors thrown in async operations</li>
+            <li>‚Ä?<strong>React Error</strong>: Runtime errors in React components</li>
           </ul>
           <p className="text-blue-600 mt-3">
             üí° After testing, please check your Sentry console to view error reports.
@@ -156,10 +156,10 @@ export default function TestErrorPage() {
             href="/"
             className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
           >
-            ‚Üê Back to Home
+            ‚Ü?Back to Home
           </a>
         </div>
       </div>
     </div>
   );
-} 
+}
