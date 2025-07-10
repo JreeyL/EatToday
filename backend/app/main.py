@@ -40,10 +40,12 @@ app.add_middleware(
 class UserCreate(BaseModel):
     email: str
 
+
 # Example root route
 @app.get("/")
 async def root():
     return {"message": "Welcome to EatToday API!"}
+
 
 # Get user list
 @app.get("/users")
@@ -56,6 +58,7 @@ async def get_users():
         sentry_sdk.capture_exception(e)
         return {"error": str(e)}
 
+
 # Test Sentry error capture
 @app.get("/test-error")
 async def test_error():
@@ -65,6 +68,7 @@ async def test_error():
     except Exception as e:
         sentry_sdk.capture_exception(e)
         return {"message": "Error captured to Sentry", "error": str(e)}
+
 
 # Create new user
 @app.post("/users")
