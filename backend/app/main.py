@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
-from typing import Dict, List, Any, Union  # 删除了 Optional
+from typing import Dict, List, Any, Union
 
 # Load environment variables from .env file
 load_dotenv()
@@ -21,11 +21,11 @@ sentry_sdk.init(
 )
 
 # Initialize Supabase client
-supabase_url: str = os.getenv("SUPABASE_URL", "")  # 提供默认值避免None
+supabase_url: str = os.getenv("SUPABASE_URL", "")
 if not supabase_url:
     raise ValueError("SUPABASE_URL environment variable is not set")
 
-supabase_key: str = os.getenv("SUPABASE_KEY", "")  # 提供默认值避免None
+supabase_key: str = os.getenv("SUPABASE_KEY", "")
 if not supabase_key:
     raise ValueError("SUPABASE_KEY environment variable is not set")
 
@@ -87,4 +87,3 @@ async def create_user(user: UserCreate) -> Dict[str, Any]:
         # Capture error to Sentry
         sentry_sdk.capture_exception(e)
         return {"error": str(e)}
-        
