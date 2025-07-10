@@ -22,7 +22,7 @@ class TestUserAPI:
             "email": "invalid-email"
         }
         response = client.post("/users", json=user_data)
-        # 应该返回400错误
+        # 应该返回422验证错误
         assert response.status_code == 422
         
     def test_create_user_missing_email(self):
@@ -57,6 +57,7 @@ class TestCORS:
         """测试CORS头部存在"""
         response = client.options("/")
         assert response.status_code == 200
+        # 检查CORS头部是否存在
         assert "access-control-allow-origin" in response.headers
         
     def test_cors_allowed_origins(self):

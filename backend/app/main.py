@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
@@ -39,18 +39,24 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
 
 class UserCreate(BaseModel):
-    email: str
+    email: EmailStr
 
 
 @app.get("/")
 async def root() -> Dict[str, str]:
     return {"message": "Welcome to EatToday API!"}
+
+
+@app.options("/")
+async def options_root():
+    """处理OPTIONS请求"""
+    return {"message": "OK"}
 
 
 @app.get("/users")
