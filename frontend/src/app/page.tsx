@@ -18,7 +18,7 @@ export default function Home() {
   const [isAdding, setIsAdding] = useState(false);
 
   // Fetch user list
-  const fetchUsers = async () => {
+  const fetchUsers = async() => {
     try {
       const response = await fetch('http://127.0.0.1:8000/users');
       const data = await response.json();
@@ -42,7 +42,7 @@ export default function Home() {
   };
 
   // Add new user
-  const addUser = async () => {
+  const addUser = async() => {
     if (!newUser.name || !newUser.email) {
       alert('Please fill in name and email');
       return;
