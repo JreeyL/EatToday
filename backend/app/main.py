@@ -41,7 +41,6 @@ class UserCreate(BaseModel):
     email: str
 
 
-
 # Example root route
 @app.get("/")
 async def root():
