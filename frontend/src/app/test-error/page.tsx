@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 export default function TestErrorPage() {
   const [testResults, setTestResults] = useState<string[]>([]);
@@ -15,14 +15,14 @@ export default function TestErrorPage() {
       Sentry.captureException(error, {
         tags: {
           test_type: 'javascript_error',
-          page: 'test-error'
+          page: 'test-error',
         },
         extra: {
           error_message: error.message,
-          stack: error.stack
-        }
+          stack: error.stack,
+        },
       });
-      setTestResults(prev => [...prev, '✅ JavaScript error captured to Sentry']);
+      setTestResults((prev) => [...prev, '✅ JavaScript error captured to Sentry']);
     }
   };
 
@@ -37,14 +37,14 @@ export default function TestErrorPage() {
       Sentry.captureException(error, {
         tags: {
           test_type: 'api_error',
-          page: 'test-error'
+          page: 'test-error',
         },
         extra: {
           error_message: error.message,
-          endpoint: '/non-existent-endpoint'
-        }
+          endpoint: '/non-existent-endpoint',
+        },
       });
-      setTestResults(prev => [...prev, '✅ API error captured to Sentry']);
+      setTestResults((prev) => [...prev, '✅ API error captured to Sentry']);
     }
   };
 
@@ -55,23 +55,23 @@ export default function TestErrorPage() {
       // This will trigger an error in the next event loop
       throw new Error('This is an uncaught async error');
     }, 100);
-    setTestResults(prev => [...prev, '⏳ Async error will trigger in 1 second']);
+    setTestResults((prev) => [...prev, '⏳ Async error will trigger in 1 second']);
   };
 
   // Test React component error
   const testReactError = () => {
     // Intentionally access a non-existent property to trigger an error
-    const obj: any = null;
+    const obj: unknown = null;
     try {
-      obj.nonExistentMethod();
+      (obj as { nonExistentMethod: () => void }).nonExistentMethod();
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
           test_type: 'react_error',
-          page: 'test-error'
-        }
+          page: 'test-error',
+        },
       });
-      setTestResults(prev => [...prev, '✅ React error captured to Sentry']);
+      setTestResults((prev) => [...prev, '✅ React error captured to Sentry']);
     }
   };
 
@@ -122,7 +122,7 @@ export default function TestErrorPage() {
         {/* Test results */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-semibold mb-4 text-gray-700">Test Results</h2>
-          
+
           {testResults.length === 0 ? (
             <p className="text-gray-500">No tests have been run yet. Please click the buttons above to start testing.</p>
           ) : (
