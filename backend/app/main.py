@@ -87,3 +87,4 @@ async def create_user(user: UserCreate) -> Dict[str, Any]:
         # Capture error to Sentry
         sentry_sdk.capture_exception(e)
         return {"error": str(e)}
+        
