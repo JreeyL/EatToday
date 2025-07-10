@@ -2,16 +2,16 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Your Next.js configuration
-  // Removed deprecated appDir configuration
+  // 您的Next.js配置
+  // 移除过时的appDir配置
 };
 
 const sentryWebpackPluginOptions = {
-  // Additional Sentry configuration options
-  silent: true, // Suppress Sentry logs during build
+  // 额外的Sentry配置选项
+  silent: true, // 抑制构建时的Sentry日志
   org: "your-org-name",
   project: "eattoday-frontend",
 };
 
-// Ensure Sentry configuration is properly exported
+// 确保Sentry配置正确导出
 module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions); 

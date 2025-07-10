@@ -5,11 +5,21 @@ from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
 from datetime import datetime
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
 
-# 加载 .env 文件中的环境变量
+# Load environment variables from .env file
 load_dotenv()
 
-# 初始化 Supabase 客户端
+# Initialize Sentry
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    integrations=[FastApiIntegration()],
+    traces_sample_rate=1.0,
+    environment=os.getenv("ENVIRONMENT", "development"),
+)
+
+# Initialize Supabase client
 supabase_url: str = os.getenv("SUPABASE_URL")
 supabase_key: str = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(supabase_url, supabase_key)
@@ -26,25 +36,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 用户模型
+# User model
 class UserCreate(BaseModel):
     email: str
 
-# 示例根路由
+# Example root route
 @app.get("/")
 async def root():
     return {"message": "Welcome to EatToday API!"}
 
-# 获取用户列表
+# Get user list
 @app.get("/users")
 async def get_users():
     try:
         response = supabase.table("users").select("*").execute()
         return response.data
     except Exception as e:
+        # Capture error to Sentry
+        sentry_sdk.capture_exception(e)
         return {"error": str(e)}
 
-# 创建新用户
+# Test Sentry error capture
+@app.get("/test-error")
+async def test_error():
+    try:
+        # Intentionally throw an error to test Sentry
+        raise Exception("This is a test error for Sentry integration verification")
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        return {"message": "Error captured to Sentry", "error": str(e)}
+
+# Create new user
 @app.post("/users")
 async def create_user(user: UserCreate):
     try:
@@ -58,4 +80,6 @@ async def create_user(user: UserCreate):
         else:
             return {"error": "Failed to create user"}
     except Exception as e:
+        # Capture error to Sentry
+        sentry_sdk.capture_exception(e)
         return {"error": str(e)}
