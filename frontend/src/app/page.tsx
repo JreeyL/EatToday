@@ -24,7 +24,6 @@ export default function Home() {
       const data = await response.json();
       setUsers(data);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
       // Capture error to Sentry
       Sentry.captureException(error, {
         tags: {
@@ -66,7 +65,6 @@ export default function Home() {
         alert('Failed to add user');
       }
     } catch (error) {
-      console.error('Failed to add user:', error);
       // Capture error to Sentry
       Sentry.captureException(error, {
         tags: {

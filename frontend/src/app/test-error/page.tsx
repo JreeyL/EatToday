@@ -61,9 +61,9 @@ export default function TestErrorPage() {
   // Test React component error
   const testReactError = () => {
     // Intentionally access a non-existent property to trigger an error
-    const obj: any = null;
+    const obj: unknown = null;
     try {
-      obj.nonExistentMethod();
+      (obj as { nonExistentMethod: () => void }).nonExistentMethod();
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
