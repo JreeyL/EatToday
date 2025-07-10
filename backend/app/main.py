@@ -70,10 +70,7 @@ async def test_error():
 @app.post("/users")
 async def create_user(user: UserCreate):
     try:
-        user_data = {
-            "email": user.email,
-            "created_at": datetime.utcnow().isoformat()
-        }
+        user_data = {"email": user.email, "created_at": datetime.utcnow().isoformat()}
         response = supabase.table("users").insert(user_data).execute()
         if response.data:
             return response.data[0]
