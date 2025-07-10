@@ -47,8 +47,7 @@ def test_cors_headers():
     assert "access-control-allow-origin" in response.headers
 
 
-@pytest.mark.asyncio
-async def test_app_initialization():
+def test_app_initialization():
     """测试应用初始化"""
     assert app is not None
     assert hasattr(app, "routes") 

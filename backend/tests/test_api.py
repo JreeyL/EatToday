@@ -66,16 +66,15 @@ class TestCORS:
         assert "access-control-allow-origin" in response.headers
 
 
-@pytest.mark.asyncio
 class TestAsyncFeatures:
     """异步功能测试类"""
     
-    async def test_app_initialization(self):
+    def test_app_initialization(self):
         """测试应用初始化"""
         assert app is not None
         assert hasattr(app, "routes")
         
-    async def test_app_middleware(self):
+    def test_app_middleware(self):
         """测试中间件配置"""
         # 检查CORS中间件是否配置
         assert any(
