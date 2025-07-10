@@ -54,7 +54,7 @@ async def root() -> Dict[str, str]:
 
 
 @app.get("/users")
-async def get_users() -> Union[List[Dict[str, Any]], Dict[str, str]]:
+async def get_users() -> Any:
     try:
         response = supabase.table("users").select("*").execute()
         return response.data
@@ -65,7 +65,7 @@ async def get_users() -> Union[List[Dict[str, Any]], Dict[str, str]]:
 
 
 @app.get("/test-error")
-async def test_error() -> Dict[str, str]:
+async def test_error() -> dict:
     try:
         # Intentionally throw an error to test Sentry
         raise Exception("This is a test error for Sentry integration verification")
@@ -75,7 +75,7 @@ async def test_error() -> Dict[str, str]:
 
 
 @app.post("/users")
-async def create_user(user: UserCreate) -> Dict[str, Any]:
+async def create_user(user: UserCreate) -> Any:
     try:
         user_data = {"email": user.email, "created_at": datetime.utcnow().isoformat()}
         response = supabase.table("users").insert(user_data).execute()
