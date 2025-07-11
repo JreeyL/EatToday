@@ -1,12 +1,7 @@
-"use client";
+'use client';
 
-<<<<<<< HEAD
-import { useState } from "react";
-import * as Sentry from "@sentry/nextjs";
-=======
 import { useState } from 'react';
 import * as Sentry from '@sentry/nextjs';
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
 
 export default function TestErrorPage() {
   const [testResults, setTestResults] = useState<string[]>([]);
@@ -15,57 +10,32 @@ export default function TestErrorPage() {
   const testJavaScriptError = () => {
     try {
       // Intentionally throw a JavaScript error
-      throw new Error("This is a test JavaScript error");
+      throw new Error('This is a test JavaScript error');
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
-<<<<<<< HEAD
-          test_type: "javascript_error",
-          page: "test-error",
-=======
           test_type: 'javascript_error',
           page: 'test-error',
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
         },
         extra: {
           error_message: error.message,
           stack: error.stack,
         },
       });
-<<<<<<< HEAD
-      setTestResults((prev) => [
-        ...prev,
-        "✅ JavaScript error captured to Sentry",
-      ]);
-=======
       setTestResults((prev) => [...prev, '✅ JavaScript error captured to Sentry']);
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
     }
   };
 
   // Test API call error
-  const testApiError = async () => {
+  const testApiError = async() => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/non-existent-endpoint",
-      );
+      const response = await fetch('http://127.0.0.1:8000/non-existent-endpoint');
       if (!response.ok) {
         throw new Error(`API call failed: ${response.status}`);
       }
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
-<<<<<<< HEAD
-          test_type: "api_error",
-          page: "test-error",
-        },
-        extra: {
-          error_message: error.message,
-          endpoint: "/non-existent-endpoint",
-        },
-      });
-      setTestResults((prev) => [...prev, "✅ API error captured to Sentry"]);
-=======
           test_type: 'api_error',
           page: 'test-error',
         },
@@ -75,7 +45,6 @@ export default function TestErrorPage() {
         },
       });
       setTestResults((prev) => [...prev, '✅ API error captured to Sentry']);
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
     }
   };
 
@@ -84,16 +53,9 @@ export default function TestErrorPage() {
     // Intentionally trigger an uncaught error
     setTimeout(() => {
       // This will trigger an error in the next event loop
-      throw new Error("This is an uncaught async error");
+      throw new Error('This is an uncaught async error');
     }, 100);
-<<<<<<< HEAD
-    setTestResults((prev) => [
-      ...prev,
-      "⏳ Async error will trigger in 1 second",
-    ]);
-=======
     setTestResults((prev) => [...prev, '⏳ Async error will trigger in 1 second']);
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
   };
 
   // Test React component error
@@ -105,19 +67,11 @@ export default function TestErrorPage() {
     } catch (error) {
       Sentry.captureException(error, {
         tags: {
-<<<<<<< HEAD
-          test_type: "react_error",
-          page: "test-error",
-        },
-      });
-      setTestResults((prev) => [...prev, "✅ React error captured to Sentry"]);
-=======
           test_type: 'react_error',
           page: 'test-error',
         },
       });
       setTestResults((prev) => [...prev, '✅ React error captured to Sentry']);
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
     }
   };
 
@@ -129,12 +83,9 @@ export default function TestErrorPage() {
         </h1>
 
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-            Error Test Tools
-          </h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Error Test Tools</h2>
           <p className="text-gray-600 mb-6">
-            Click the buttons below to test different types of error capture.
-            Each error will be sent to Sentry for monitoring.
+            Click the buttons below to test different types of error capture. Each error will be sent to Sentry for monitoring.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -170,19 +121,10 @@ export default function TestErrorPage() {
 
         {/* Test results */}
         <div className="bg-white rounded-lg shadow-md p-6">
-<<<<<<< HEAD
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-            Test Results
-          </h2>
-=======
           <h2 className="text-2xl font-semibold mb-4 text-gray-700">Test Results</h2>
->>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
 
           {testResults.length === 0 ? (
-            <p className="text-gray-500">
-              No tests have been run yet. Please click the buttons above to
-              start testing.
-            </p>
+            <p className="text-gray-500">No tests have been run yet. Please click the buttons above to start testing.</p>
           ) : (
             <div className="space-y-2">
               {testResults.map((result, index) => (
@@ -196,28 +138,15 @@ export default function TestErrorPage() {
 
         {/* Instructions */}
         <div className="mt-6 bg-blue-50 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">
-            📋 Test Instructions
-          </h3>
+          <h3 className="text-lg font-semibold text-blue-800 mb-2">📋 Test Instructions</h3>
           <ul className="text-blue-700 space-y-1">
-            <li>
-              • <strong>JavaScript Error</strong>: Directly thrown errors,
-              caught by try-catch
-            </li>
-            <li>
-              • <strong>API Call Error</strong>: Network request failure errors
-            </li>
-            <li>
-              • <strong>Async Error</strong>: Uncaught errors thrown in async
-              operations
-            </li>
-            <li>
-              • <strong>React Error</strong>: Runtime errors in React components
-            </li>
+            <li>• <strong>JavaScript Error</strong>: Directly thrown errors, caught by try-catch</li>
+            <li>• <strong>API Call Error</strong>: Network request failure errors</li>
+            <li>• <strong>Async Error</strong>: Uncaught errors thrown in async operations</li>
+            <li>• <strong>React Error</strong>: Runtime errors in React components</li>
           </ul>
           <p className="text-blue-600 mt-3">
-            💡 After testing, please check your Sentry console to view error
-            reports.
+            💡 After testing, please check your Sentry console to view error reports.
           </p>
         </div>
 
