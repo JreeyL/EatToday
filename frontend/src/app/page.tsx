@@ -1,8 +1,14 @@
 "use client";
 
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import ErrorBoundary from "../components/ErrorBoundary";
+=======
+import { useState, useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
+import ErrorBoundary from '../components/ErrorBoundary';
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
 
 interface User {
   id: number;
@@ -27,8 +33,13 @@ export default function Home() {
       // Capture error to Sentry
       Sentry.captureException(error, {
         tags: {
+<<<<<<< HEAD
           action: "fetch_users",
           endpoint: "/users",
+=======
+          action: 'fetch_users',
+          endpoint: '/users',
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
         },
         extra: {
           error_message: error.message,
@@ -68,8 +79,13 @@ export default function Home() {
       // Capture error to Sentry
       Sentry.captureException(error, {
         tags: {
+<<<<<<< HEAD
           action: "add_user",
           endpoint: "/users",
+=======
+          action: 'add_user',
+          endpoint: '/users',
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
         },
         extra: {
           user_data: newUser,
@@ -97,26 +113,38 @@ export default function Home() {
 
           {/* Add user form */}
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+<<<<<<< HEAD
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">
               Add New User
             </h2>
+=======
+            <h2 className="text-2xl font-semibold mb-4 text-gray-700">Add New User</h2>
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
                 placeholder="Name"
                 value={newUser.name}
+<<<<<<< HEAD
                 onChange={(e) =>
                   setNewUser({ ...newUser, name: e.target.value })
                 }
+=======
+                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 type="email"
                 placeholder="Email"
                 value={newUser.email}
+<<<<<<< HEAD
                 onChange={(e) =>
                   setNewUser({ ...newUser, email: e.target.value })
                 }
+=======
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <button
@@ -124,16 +152,24 @@ export default function Home() {
                 disabled={isAdding}
                 className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
+<<<<<<< HEAD
                 {isAdding ? "Adding..." : "Add User"}
+=======
+                {isAdding ? 'Adding...' : 'Add User'}
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
               </button>
             </div>
           </div>
 
           {/* User list */}
           <div className="bg-white rounded-lg shadow-md p-6">
+<<<<<<< HEAD
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">
               User List
             </h2>
+=======
+            <h2 className="text-2xl font-semibold mb-4 text-gray-700">User List</h2>
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
 
             {loading ? (
               <div className="text-center py-8">
@@ -143,9 +179,13 @@ export default function Home() {
             ) : users.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-gray-500 text-lg">No user data</p>
+<<<<<<< HEAD
                 <p className="text-gray-400 text-sm mt-2">
                   Please add the first user
                 </p>
+=======
+                <p className="text-gray-400 text-sm mt-2">Please add the first user</p>
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -179,7 +219,11 @@ export default function Home() {
                           {user.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+<<<<<<< HEAD
                           {new Date(user.created_at).toLocaleString("zh-CN")}
+=======
+                          {new Date(user.created_at).toLocaleString('zh-CN')}
+>>>>>>> af1d1f58645919b5e58f626d020a30e900a23354
                         </td>
                       </tr>
                     ))}
